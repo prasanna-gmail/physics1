@@ -6,6 +6,8 @@
     <meta name="viewport" content="user-scalable=no">
     <title>p1 Full Screen Rive Animation</title>
     <link rel="stylesheet" href="styles_fullscreen.css">
+    <script src="https://unpkg.com/rive-js@0.7.4/dist/rive.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
@@ -16,42 +18,48 @@
     <!-- audio1 -->
 
     <div id="controls">
-        <audio src="physics1.mp3" id="myAudio"></audio>
-        <button onClick="playAnim(1)">Play Ball</button>
-        <button onClick="playAnim(2)">Play Car</button>
-        <button onClick="playAnim(3)">Play Plane</button>
-        <button onClick="playMyAudio()">Play Audio</button>
-        <button onClick="pauseMyAudio()">Pause Audio</button>
+        <audio src="physics1.mp3" id="myAudio"></audio><br>
+        <button onClick="playAnim(1)">Play Ball</button><br>
+        <button onClick="playAnim(2)">Play Car</button><br>
+        <button onClick="playAnim(3)">Play Plane</button><br>
+        <button onClick="playMyAudio()">Play Audio</button><br>
+        <button onClick="pauseMyAudio()">Pause Audio</button><br>
         <p id="audioStatus">Click The Play Button</p>
     </div>
 
     <script>
+        const canvas = document.getElementById('canvas');
         let myRive = null
         let nextAnim = 1
+
+        function addTrans(step) {
+
+            var context = canvas.getContext("2d");
+            console.log("pkp:  ~ file: physics1_rive.html:39 ~ addTrans ~ context", context)
+            context.fillStyle = "black";
+            context.font = "bold 18px Arial";
+            context.fillText("Text", (canvas.width / 2) - 17, (canvas.height / 2) + 8);
+        }
+        addTrans()
         function playAnim(step) {
             if (step == 0) {
+                myRive.play("trans")
                 myRive.play("trees")
                 myRive.pause("ball1")
                 myRive.pause("car1")
                 myRive.pause("plane1")
-
-                nextAnim == 2
             } else if (step == 1) {
                 myRive.play("ball1")
                 myRive.pause("car1")
                 myRive.pause("plane1")
-
-                nextAnim == 2
             } else if (step == 2) {
                 myRive.play("car1")
                 myRive.pause("ball1")
                 myRive.pause("plane1")
-                nextAnim == 3
             } else if (step == 3) {
                 myRive.play("plane1")
                 // myRive.pause("car1")
                 myRive.pause("ball1")
-                nextAnim == 3
             } else {
                 console.log("pkp:  ~ file: physics1_rive.html:45 ~ playAnim ~ else")
 
@@ -60,6 +68,10 @@
         function playMyAudio() {
             document.getElementById("myAudio").play();
             document.getElementById("audioStatus").innerHTML = "Audio is Playing";
+
+            // const inputs = myRive.stateMachineInputs('State Machine 1');
+            // console.log("pkp:  ~ file: physics1_rive.html:60 ~ playMyAudio ~ inputs", inputs)
+
 
         }
         function pauseMyAudio() {
@@ -87,10 +99,10 @@
             }
         });
     </script>
-    <script src="https://unpkg.com/rive-js@0.7.4/dist/rive.min.js"></script>
     <script>
-        const canvas = document.getElementById('canvas');
 
+
+        const button1 = document.getElementById('button1');
         myRive = rive.Rive.new({
             // src: 'https://cdn.rive.app/animations/off_road_car_v7.riv',
             // src: 'https://cdn.rive.app/animations/off_road_car_v7.riv',
@@ -102,8 +114,23 @@
             // artboard: 'confidence',
             // which animations should be played and mixed together
             // animations: ['idle', 'windshield_wipers', 'bouncing'],
-            animations: ['ball1', 'car1', 'plane1', 'trees'],
-            // stateMachines: "State Machine 1",
+            animations: ['ball1', 'car1', 'plane1', 'trees', "trans"],
+            stateMachines: "State Machine 1",
+            onPlay: (e) => {
+                console.log("pkp:  ~ file: physics1_rive_full.html:132 ~ onPlay")
+
+            },
+            onLoad: (_) => {
+
+                console.log("pkp:  ~ file: physics1_rive.html:121 ~ _", _)
+
+                // Get the inputs via the name of the state machine
+                // const inputs = r.stateMachineInputs('bumpy');
+                // // Find the input you want to set a value for, or trigger
+                // const transTrigger = inputs.find(i => i.name === 'bump');
+                // button1.onclick = () => transTrigger.fire();
+            },
+
             onStateChange: (event) => {
                 console.log("pkp:  ~ file: index_fullscreen2.html:31 ~ event.data[0]", event.data[0])
                 // stateName.innerHTML = event.data[0];

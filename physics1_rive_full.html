@@ -104,6 +104,21 @@
             // // which animations should be played and mixed together
             // animations: ['idle', 'windshield_wipers', 'bouncing'],
             // layout: rive.Layout.new({ fit: rive.Fit.Cover, alignment: rive.Alignment.Center }),
+
+            onPlay: (e) => {
+                console.log("pkp:  ~ file: physics1_rive_full.html:132 ~ onPlay")
+
+            },
+            onLoad: (e) => {
+                console.log("pkp:  ~ file: physics1_rive_full.html:134 ~ e", e)
+
+                // Get the inputs via the name of the state machine
+                // const inputs = r.stateMachineInputs('bumpy');
+                // // Find the input you want to set a value for, or trigger
+                // const transTrigger = inputs.find(i => i.name === 'bump');
+                // button1.onclick = () => transTrigger.fire();
+            },
+
             onStateChange: (event) => {
                 console.log("pkp:  ~ file: index_fullscreen2.html:31 ~ event.data[0]", event.data[0])
                 // stateName.innerHTML = event.data[0];
