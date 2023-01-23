@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no">
+    <title>p2 Full Screen Rive Animation</title>
+
+    <link rel="stylesheet" href="styles_fullscreen.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="controls">
+        <audio src="physics1.mp3" id="myAudio"></audio>
+        <button onClick="playAnim(1)">Play Ball</button>
+        <button onClick="playAnim(2)">Play Car</button>
+        <button onClick="playAnim(3)">Play Plane</button>
+        <button onClick="playMyAudio()">Play Audio</button>
+        <button onClick="pauseMyAudio()">Pause Audio</button>
+        <p id="audioStatus">Click The Play Button</p>
+    </div>
+
+    <script>
+        let myRive = null
+        let nextAnim = 1
+        function playAnim(step) {
+            if (step == 0) {
+                myRive.play("trees")
+                myRive.pause("ball1")
+                myRive.pause("car1")
+                myRive.pause("plane1")
+
+                nextAnim == 2
+            } else if (step == 1) {
+                myRive.play("ball1")
+                myRive.pause("car1")
+                myRive.pause("plane1")
+
+                nextAnim == 2
+            } else if (step == 2) {
+                myRive.play("car1")
+                myRive.pause("ball1")
+                myRive.pause("plane1")
+                nextAnim == 3
+            } else if (step == 3) {
+                myRive.play("plane1")
+                // myRive.pause("car1")
+                myRive.pause("ball1")
+                nextAnim == 3
+            } else {
+                console.log("pkp:  ~ file: physics1_rive.html:45 ~ playAnim ~ else")
+
+            }
+        }
+        function playMyAudio() {
+            document.getElementById("myAudio").play();
+            document.getElementById("audioStatus").innerHTML = "Audio is Playing";
+
+        }
+        function pauseMyAudio() {
+            document.getElementById("myAudio").pause();
+            document.getElementById("audioStatus").innerHTML = "Audio Paused";
+        }
+
+        $("#myAudio").bind('timeupdate', function (e) {
+            // console.log("pkp:  ~ file: physics1_rive.html:35 ~ e", e)
+            console.log("pkp:  ~ file: physics1_rive.html:37 ~ this.currentTime", this.currentTime)
+            //trees
+            // playAnim(0)
+            if (this.currentTime >= 1 && this.currentTime <= 1.5) {
+                playAnim(0)
+            } else if (this.currentTime >= 10 && this.currentTime <= 10.5) {
+                playAnim(1)
+            } else if (this.currentTime >= 25 && this.currentTime <= 25.5) {
+                //car
+                playAnim(2)
+            } else if (this.currentTime >= 27 && this.currentTime <= 27.5) {
+                //plane
+                playAnim(3)
+            } else {
+
+            }
+        });
+    </script>
+
+    <script src="https://unpkg.com/rive-js@0.7.4/dist/rive.min.js"></script>
+    <script>
+        const canvas = document.getElementById('canvas');
+
+        rive.Rive.new({
+            // src: '2034-4031-highway-truck.riv',
+            // src: 'pull_down_to_refresh.riv',
+            src: 'physics1.riv',
+            // src: 'https://cdn.rive.app/animations/off_road_car_v7.riv',
+            canvas: canvas,
+            autoplay: true,
+            animations: ['ball1', 'car1', 'plane1', 'trees'],
+            // specifies which artboard to use
+            // artboard: 'New Artboard',
+            // // which animations should be played and mixed together
+            // animations: ['idle', 'windshield_wipers', 'bouncing'],
+            // layout: rive.Layout.new({ fit: rive.Fit.Cover, alignment: rive.Alignment.Center }),
+            onStateChange: (event) => {
+                console.log("pkp:  ~ file: index_fullscreen2.html:31 ~ event.data[0]", event.data[0])
+                // stateName.innerHTML = event.data[0];
+            },
+            onLoop: (event) => {
+                console.log("pkp:  ~ onLoop: ~ event.data[0]", event.data[0])
+                // stateName.innerHTML = event.data[0];
+            },
+            layout: rive.Layout.new({ fit: rive.Fit.Cover, alignment: rive.Alignment.Center }),
+
+        });
+
+        // When the window resizes, resize the canvas
+        window.addEventListener('resize', resizeCanvas, false);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            console.log("pkp:  ~ file: physics1_rive.html:40 ~ resizeCanvas ~ canvas.width", canvas.width)
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+    </script>
+</body>
+
+</html>

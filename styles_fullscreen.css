@@ -1,0 +1,8 @@
+#controls {
+    position: absolute;
+    top: 100px;
+}
+
+body {
+    overflow: hidden;
+}
